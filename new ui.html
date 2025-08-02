@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marwari Basket - Traditional Rajasthani Products</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --barbie-pink: #E62A81;
+            --coral-reef: #FF7D61;
+            --minion-yellow: #F0E245;
+            --persimmon: #F05C03;
+            --rainbow-indigo: #172C64;
+            --wageningen-green: #24A32B;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --dark-gray: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+        }
+        
+        /* Clean glassmorphism - subtle */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Professional hover effects */
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--barbie-pink), var(--persimmon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--barbie-pink);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--barbie-pink);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .cart-icon {
+            background: var(--barbie-pink);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        
+        .cart-icon:hover {
+            background: var(--coral-reef);
+            transform: scale(1.05);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--rainbow-indigo) 0%, var(--barbie-pink) 100%);
+            overflow: hidden;
+        }
+        
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            z-index: 2;
+        }
+        
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        .hero-text p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--coral-reef), var(--barbie-pink));
+            border: none;
+            padding: 18px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(230, 42, 129, 0.3);
+        }
+        
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .camel-illustration {
+            width: 300px;
+            height: 300px;
+            animation: gentle-float 6s ease-in-out infinite;
+        }
+        
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        /* Section styling */
+        .section {
+            padding: 80px 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            height: 240px;
+            background: linear-gradient(135deg, var(--coral-reef), var(--persimmon));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .product-info {
+            padding: 25px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+        
+        .product-category {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--barbie-pink);
+        }
+        
+        /* Trending Carousel */
+        .carousel-section {
+            background: var(--light-gray);
+            padding: 80px 0;
+        }
+        
+        .carousel-container {
+            overflow: hidden;
+            border-radius: 20px;
+            position: relative;
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 30px;
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 40px;
+        }
+        
+        .carousel-btn {
+            background: var(--barbie-pink);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-btn:hover {
+            background: var(--coral-reef);
+            transform: scale(1.05);
+        }
+        
+        /* Special Offers */
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .offer-card {
+            background: linear-gradient(135deg, var(--barbie-pink), var(--coral-reef));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .offer-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: subtle-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+        
+        .offer-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .offer-description {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+        
+        .offer-tag {
+            background: var(--minion-yellow);
+            color: var(--dark-gray);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        /* Best Sellers */
+        .bestsellers-scroll {
+            display: flex;
+            gap: 25px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-behavior: smooth;
+        }
+        
+        .bestsellers-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .bestsellers-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .bestsellers-scroll::-webkit-scrollbar-thumb {
+            background: var(--barbie-pink);
+            border-radius: 10px;
+        }
+        
+        .bestseller-item {
+            min-width: 250px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .bestseller-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .bestseller-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--persimmon), var(--coral-reef));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 15px;
+        }
+        
+        .bestseller-title {
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+        
+        .bestseller-price {
+            color: var(--barbie-pink);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark-gray);
+            color: white;
+            padding: 60px 30px 30px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--minion-yellow);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section ul li a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section ul li a:hover {
+            color: var(--coral-reef);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--barbie-pink);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: var(--coral-reef);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 60px 20px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .camel-illustration {
+                width: 200px;
+                height: 200px;
+            }
+        }
+        
+        /* Fade in animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
+        
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s ease;
+        }
+        
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Marwari Basket</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#offers">Offers</a></li>
+                <li><a href="#bestsellers">Best Sellers</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="cart-icon">🛒</div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-pattern"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="fade-in">Authentic Rajasthani Heritage</h1>
+                <p class="fade-in">Discover handcrafted treasures from the royal state of Rajasthan, where tradition meets timeless elegance.</p>
+                <button class="cta-button fade-in">
+                    <span>Explore Collection</span>
+                    <span>→</span>
+                </button>
+            </div>
+            <div class="hero-visual">
+                <div class="camel-illustration">
+                    <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M80 220 C80 190, 110 180, 140 190 L180 185 C210 180, 240 190, 240 220 L240 250 C240 265, 225 265, 210 260 L110 260 C95 265, 80 265, 80 250 Z" fill="#F0E245" opacity="0.9"/>
+                        <circle cx="220" cy="210" r="20" fill="#FF7D61"/>
+                        <path d="M180 150 C180 135, 195 120, 220 130 C245 120, 260 135, 260 150 L245 180 L195 180 Z" fill="#F05C03" opacity="0.9"/>
+                        <circle cx="230" cy="145" r="4" fill="white"/>
+                        <path d="M100 180 C120 175, 140 180, 160 175" stroke="#E62A81" stroke-width="3" fill="none"/>
+                        <circle cx="120" cy="200" r="6" fill="#24A32B"/>
+                        <circle cx="200" cy="205" r="6" fill="#24A32B"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Products -->
+    <section class="carousel-section" id="products">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Trending Products</h2>
+                <p class="section-subtitle fade-in">Handpicked selections from master artisans across Rajasthan</p>
+            </div>
+            <div class="carousel-container">
+                <div class="carousel" id="trending-carousel">
+                    <div class="product-card hover-lift slide-in-left">
+                        <div class="product-image">🏺</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Blue Pottery Vase</h3>
+                            <p class="product-category">Traditional Pottery</p>
+                            <p class="product-price">₹2,499</p>
+                        </div>
+                    </div>
+                    <div class="product-card hover-lift slide-in-left">
+                        <div class="product-image">🧵</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Block Print Saree</h3>
+                            <p class="product-category">Traditional Textiles</p>
+                            <p class="product-price">₹4,999</p>
+                        </div>
+                    </div>
+                    <div class="product-card hover-lift slide-in-left">
+                        <div class="product-image">💎</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Kundan Necklace</h3>
+                            <p class="product-category">Traditional Jewelry</p>
+                            <p class="product-price">₹7,999</p>
+                        </div>
+                    </div>
+                    <div class="product-card hover-lift slide-in-left">
+                        <div class="product-image">🎨</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Miniature Painting</h3>
+                            <p class="product-category">Traditional Art</p>
+                            <p class="product-price">₹3,499</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-btn" onclick="scrollCarousel(-1)">‹</button>
+                <button class="carousel-btn" onclick="scrollCarousel(1)">›</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Launches -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title fade-in">New Arrivals</h2>
+            <p class="section-subtitle fade-in">Fresh from the workshops of skilled craftsmen</p>
+        </div>
+        <div class="product-grid">
+            <div class="product-card hover-lift fade-in">
+                <div class="product-image">👗</div>
+                <div class="product-info">
+                    <h3 class="product-title">Bandhani Lehenga</h3>
+                    <p class="product-category">Festive Wear</p>
+                    <p class="product-price">₹8,999</p>
+                </div>
+            </div>
+            <div class="product-card hover-lift fade-in">
+                <div class="product-image">🪔</div>
+                <div class="product-info">
+                    <h3 class="product-title">Brass Diyas Set</h3>
+                    <p class="product-category">Home Decor</p>
+                    <p class="product-price">₹1,499</p>
+                </div>
+            </div>
+            <div class="product-card hover-lift fade-in">
+                <div class="product-image">🎭</div>
+                <div class="product-info">
+                    <h3 class="product-title">Kathputli Dolls</h3>
+                    <p class="product-category">Traditional Crafts</p>
+                    <p class="product-price">₹2,999</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers -->
+    <section class="section" id="offers">
+        <div class="section-header">
+            <h2 class="section-title fade-in">Special Offers</h2>
+            <p class="section-subtitle fade-in">Limited time deals on premium collections</p>
+        </div>
+        <div class="offers-grid">
+            <div class="offer-card slide-in-left">
+                <h3 class="offer-title">Festival Collection</h3>
+                <p class="offer-description">Celebrate with authentic Rajasthani attire and accessories at unbeatable prices</p>
+                <span class="offer-tag">Up to 50% OFF</span>
+            </div>
+            <div class="offer-card slide-in-right">
+                <h3 class="offer-title">Artisan Bundle</h3>
+                <p class="offer-description">Curated selection of handicrafts with complimentary gift wrapping</p>
+                <span class="offer-tag">Buy 2 Get 1 Free</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="section" id="bestsellers">
+        <div class="section-header">
+            <h2 class="section-title fade-in">Customer Favorites</h2>
+            <p class="section-subtitle fade-in">Most loved products by our customers</p>
+        </div>
+        <div class="bestsellers-scroll">
+            <div class="bestseller-item hover-lift">
+                <div class="bestseller-image">🕌</div>
+                <h4 class="bestseller-title">Marble Inlay Art</h4>
+                <p class="bestseller-price">₹5,999</p>
+            </div>
+            <div class="bestseller-item hover-lift">
+                <div class="bestseller-image">🐘</div>
+                <h4 class="bestseller-title">Wooden Elephant</h4>
+                <p class="bestseller-price">₹3,499</p>
+            </div>
+            <div class="bestseller-item hover-lift">
+                <div class="bestseller-image">🎪</div>
+                <h4 class="bestseller-title">Rajasthani Umbrella</h4>
+                <p class="bestseller-price">₹1,999</p>
+            </div>
+            <div class="bestseller-item hover-lift">
+                <div class="bestseller-image">🧿</div>
+                <h4 class="bestseller-title">Mirror Work Bag</h4>
+                <p class="bestseller-price">₹1,299</p>
+            </div>
+            <div class="bestseller-item hover-lift">
+                <div class="bestseller-image">🏮</div>
+                <h4 class="bestseller-title">Camel Bone Box</h4>
+                <p class="bestseller-price">₹2,499</p>
+            </div>
+            <div class="bestseller-item hover-lift">
+                <div class="bestseller-image">⚱️</div>
+                <h4 class="bestseller-title">Ceramic Urns</h4>
+                <p class="bestseller-price">₹1,899</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Marwari Basket</h3>
+                <p>Preserving the rich cultural heritage of Rajasthan through authentic handcrafted products. Every purchase supports local artisans and their traditional crafts.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📺</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#offers">Special Offers</a></li>
+                    <li><a href="#bestsellers">Best Sellers</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Product Categories</h3>
+                <ul>
+                    <li><a href="#">Handicrafts</a></li>
+                    <li><a href="#">Traditional Jewelry</a></li>
+                    <li><a href="#">Textiles & Clothing</a></li>
+                    <li><a href="#">Blue Pottery</a></li>
+                    <li><a href="#">Home Decor</a></li>
+                    <li><a href="#">Art & Paintings</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Get in Touch</h3>
+                <ul>
+                    <li>📍 Mehrangarh Fort Road, Jodhpur, Rajasthan 342006</li>
+                    <li>📞 +91 98765 43210</li>
+                    <li>✉️ hello@marwaribasket.com</li>
+                    <li>🕒 Mon-Sat: 9:00 AM - 8:00 PM</li>
+                    <li>🚚 Free shipping above ₹2,000</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Marwari Basket. All rights reserved. | Handcrafted with ❤️ in Rajasthan</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animation elements
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Professional carousel functionality
+        let currentSlide = 0;
+        const carousel = document.getElementById('trending-carousel');
+        const slides = carousel.children;
+        const totalSlides = slides.length;
+        const slidesToShow = window.innerWidth > 768 ? 3 : 1;
+
+        function scrollCarousel(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - slidesToShow;
+            } else if (currentSlide > totalSlides - slidesToShow) {
+                currentSlide = 0;
+            }
+            
+            const translateX = currentSlide * -(100 / slidesToShow);
+            carousel.style.transform = `translateX(${translateX}%)`;
+        }
+
+        // Auto-scroll carousel every 5 seconds
+        setInterval(() => {
+            scrollCarousel(1);
+        }, 5000);
+
+        // Enhanced product card interactions
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const image = this.querySelector('.product-image');
+                image.style.transform = 'scale(1.05)';
+                image.style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                const image = this.querySelector('.product-image');
+                image.style.transform = 'scale(1)';
+            });
+        });
+
+        // Smooth navigation
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Professional button click effects
+        document.querySelectorAll('.cta-button, .carousel-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Add clicked class for animation
+                this.classList.add('clicked');
+                
+                // Remove class after animation
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 200);
+            });
+        });
+
+        // Add CSS for button click effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .cta-button.clicked, .carousel-btn.clicked {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+            
+            .bestsellers-scroll {
+                scrollbar-width: thin;
+                scrollbar-color: var(--barbie-pink) #f1f1f1;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Staggered animations for product grids
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 150);
+                }
+            });
+        }, observerOptions);
+
+        // Apply stagger to product grids
+        document.querySelectorAll('.product-grid .product-card').forEach(card => {
+            staggerObserver.observe(card);
+        });
+
+        // Bestsellers horizontal scroll enhancement
+        const bestsellersScroll = document.querySelector('.bestsellers-scroll');
+        let isScrolling = false;
+
+        bestsellersScroll.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            bestsellersScroll.scrollLeft += e.deltaY;
+        });
+
+        // Mobile menu functionality
+        function createMobileMenu() {
+            if (window.innerWidth <= 768) {
+                const nav = document.querySelector('.nav');
+                const existingBtn = nav.querySelector('.mobile-menu-btn');
+                
+                if (!existingBtn) {
+                    const menuBtn = document.createElement('div');
+                    menuBtn.innerHTML = '☰';
+                    menuBtn.className = 'mobile-menu-btn';
+                    menuBtn.style.cssText = `
+                        font-size: 1.5rem;
+                        cursor: pointer;
+                        color: var(--dark-gray);
+                        padding: 10px;
+                    `;
+                    
+                    nav.appendChild(menuBtn);
+                    
+                    let mobileMenuOpen = false;
+                    menuBtn.addEventListener('click', function() {
+                        const navLinks = document.querySelector('.nav-links');
+                        if (mobileMenuOpen) {
+                            navLinks.style.display = 'none';
+                            mobileMenuOpen = false;
+                        } else {
+                            navLinks.style.cssText = `
+                                display: flex;
+                                flex-direction: column;
+                                position: absolute;
+                                top: 100%;
+                                left: 0;
+                                width: 100%;
+                                background: rgba(255, 255, 255, 0.98);
+                                backdrop-filter: blur(15px);
+                                padding: 20px;
+                                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+                                gap: 15px;
+                            `;
+                            mobileMenuOpen = true;
+                        }
+                    });
+                }
+            }
+        }
+
+        // Initialize mobile menu on load and resize
+        window.addEventListener('load', createMobileMenu);
+        window.addEventListener('resize', createMobileMenu);
+
+        // Smooth header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Lazy loading for better performance
+        const lazyImages = document.querySelectorAll('.product-image');
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.style.opacity = '1';
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => {
+            img.style.opacity = '0.8';
+            img.style.transition = 'opacity 0.3s ease';
+            imageObserver.observe(img);
+        });
+
+        // Professional loading state
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+            document.body.style.transition = 'opacity 0.3s ease';
+        });
+
+        // Set initial loading state
+        document.body.style.opacity = '0';
+
+        console.log('🎨 Marwari Basket - Professional E-commerce UI Loaded');
+        console.log('✨ Features: Clean design, subtle animations, mobile responsive, professional UX');
+    </script>
+</body>
+</html>
