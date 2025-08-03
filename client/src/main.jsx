@@ -5,19 +5,19 @@ import './index.css';
 import { UserProvider } from './context/UserContext';
 import { CartProvider } from './context/CartContext';
 import { Toaster } from 'react-hot-toast';
-import Lenis from 'lenis';
+// import Lenis from 'lenis';
 
 function LenisProvider({ children }) {
   useEffect(() => {
-    const lenis = new Lenis();
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-    return () => {
-      lenis.destroy();
-    };
+    // const lenis = new Lenis();
+    // function raf(time) {
+    //   lenis.raf(time);
+    //   requestAnimationFrame(raf);
+    // }
+    // requestAnimationFrame(raf);
+    // return () => {
+    //   lenis.destroy();
+    // };
   }, []);
   return children;
 }
