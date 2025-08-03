@@ -1,12 +1,19 @@
 {
   "version": 2,
   "name": "marwari-basket-frontend",
-  "buildCommand": "cd client && npm run build",
-  "outputDirectory": "client/dist",
+  "builds": [
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "client/dist"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/client/dist/$1"
     }
   ]
 } 
