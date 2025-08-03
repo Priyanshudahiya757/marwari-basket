@@ -13,7 +13,6 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@studio-freight/lenis": "^1.0.42",
     "axios": "^1.11.0",
     "framer-motion": "^12.23.9",
     "jwt-decode": "^4.0.0",
