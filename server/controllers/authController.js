@@ -9,7 +9,12 @@ const bcrypt = require('bcryptjs');
 
 // Helper: Generate JWT
 function generateToken(user) {
-  return jwt.sign({ id: user._id, email: user.email, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ 
+    id: user._id, 
+    email: user.email, 
+    role: user.role,
+    isAdmin: user.isAdmin 
+  }, process.env.JWT_SECRET, { expiresIn: '7d' });
 }
 
 // Registration
@@ -41,14 +46,33 @@ exports.register = async (req, res) => {
 // Login
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
-    const user = await User.findOne({ email });
+    const { emailOrMobile, password } = req.body;
+    if (!emailOrMobile || !password) return res.status(400).json({ message: 'Email/Mobile and password required' });
+    
+    // Find user by email or phone
+    const user = await User.findOne({
+      $or: [
+        { email: emailOrMobile.toLowerCase() },
+        { phone: emailOrMobile }
+      ]
+    });
+    
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
     const match = await user.matchPassword(password);
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
+    
     const token = generateToken(user);
-    res.json({ token, user: { id: user._id, name: user.name, email: user.email, phone: user.phone } });
+    res.json({ 
+      token, 
+      user: { 
+        id: user._id, 
+        name: user.name, 
+        email: user.email, 
+        phone: user.phone,
+        role: user.role,
+        isAdmin: user.isAdmin
+      } 
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

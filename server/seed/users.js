@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 
 const users = [
-  { name: 'Demo User', email: 'demo@marwaribasket.com', password: 'password123' },
-  { name: 'Admin User', email: 'admin@marwaribasket.com', password: 'adminpass', isAdmin: true },
+  { name: 'Demo User', email: 'demo@marwaribasket.com', password: 'password123', phone: '9876543210' },
+  { name: 'Admin User', email: 'admin@marwaribasket.com', password: 'adminpass', phone: '9876543211', role: 'admin' },
 ];
 
 async function seed() {
