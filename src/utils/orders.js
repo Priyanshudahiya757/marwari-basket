@@ -1,8 +1,10 @@
 import api from './api';
 
-export async function fetchMyOrders(token) {
-  const res = await api.get('/api/orders/my', {
-    headers: { Authorization: `Bearer ${token}` },
+export async function fetchMyOrders() {
+  const res = await api.get('/orders/my', {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
   });
   return res.data;
 }

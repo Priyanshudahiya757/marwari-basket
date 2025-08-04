@@ -15,7 +15,7 @@ function AdminLoginForm() {
     e.preventDefault();
     setFormLoading(true);
     try {
-      const res = await api.post('/api/auth/login', {
+      const res = await api.post('/auth/login', {
         emailOrMobile,
         password,
       });

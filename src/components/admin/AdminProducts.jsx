@@ -95,7 +95,7 @@ function AdminProducts() {
     e.preventDefault();
     setAddLoading(true);
     try {
-      const res = await api.post('/api/products', {
+      const res = await api.post('/products', {
         ...addForm,
         price: Number(addForm.price),
         stock: Number(addForm.stock),

@@ -17,7 +17,7 @@ function AdminOrders() {
       setLoading(true);
       setError('');
       try {
-        const res = await api.get('/api/orders', {
+        const res = await api.get('/orders', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data);
