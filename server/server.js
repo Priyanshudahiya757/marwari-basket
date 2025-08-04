@@ -15,6 +15,7 @@ const adminOrderRoutes = require('./routes/adminOrder');
 const adminCustomerRoutes = require('./routes/adminCustomer');
 const adminInventoryRoutes = require('./routes/adminInventory');
 const adminAnalyticsRoutes = require('./routes/adminAnalytics');
+const adminRoutes = require('./routes/admin');
 const path = require('path');
 
 // Load environment variables from .env file
@@ -57,6 +58,7 @@ app.use('/api/admin/orders', adminOrderRoutes); // Admin order routes
 app.use('/api/admin/customers', adminCustomerRoutes); // Admin customer routes
 app.use('/api/admin/inventory', adminInventoryRoutes); // Admin inventory routes
 app.use('/api/admin/analytics', adminAnalyticsRoutes); // Admin analytics routes
+app.use('/api/admin', adminRoutes); // Admin setup routes
 
 // Serve uploads folder as static
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
