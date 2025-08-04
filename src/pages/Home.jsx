@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { products, categories } from '../utils/productData';
+import { fetchProducts } from '../utils/products';
 import ProductCard from '../components/ProductCard';
 import camelImg from '../assets/camel.png';
 
@@ -13,16 +13,17 @@ export default function Home() {
     const loadFeaturedProducts = async () => {
       setLoading(true);
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const data = await fetchProducts();
+        const products = data.products || data || [];
         
-        // Get top-rated products as featured
+        // Get top-rated products as featured (or just first 8 if no ratings)
         const featured = products
-          .sort((a, b) => b.rating - a.rating)
+          .sort((a, b) => (b.rating || 0) - (a.rating || 0))
           .slice(0, 8);
         setFeaturedProducts(featured);
       } catch (error) {
         console.error('Failed to load featured products:', error);
+        setFeaturedProducts([]);
       } finally {
         setLoading(false);
       }
@@ -88,29 +89,10 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categories.map((category) => (
-              <Link
-                key={category.id}
-                to={`/products?category=${category.id}`}
-                className="group block bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors duration-200"
-              >
-                <div className="aspect-w-16 aspect-h-9 mb-4">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition-transform duration-200"
-                  />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{category.name}</h3>
-                <p className="text-gray-600 mb-3">{category.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">{category.productCount} products</span>
-                  <span className="text-yellow-600 font-medium group-hover:text-yellow-700">
-                    Explore →
-                  </span>
-                </div>
-              </Link>
-            ))}
+            {/* Categories will be loaded from API */}
+            <div className="text-center py-8">
+              <p className="text-gray-500">Categories will be loaded from the database</p>
+            </div>
           </div>
         </div>
       </section>
@@ -121,13 +103,13 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured Products</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Our most popular and highly-rated products handpicked for you
+              Discover our handpicked selection of the finest Rajasthani products
             </p>
           </div>
-
+          
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-sm border p-4 animate-pulse">
                   <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
                   <div className="space-y-2">
@@ -138,89 +120,88 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
-          )}
-
-          <div className="text-center mt-12">
-            <Link
-              to="/products"
-              className="bg-yellow-400 text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors duration-200"
-            >
-              View All Products
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Marwari Basket?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              We bring you the finest Rajasthani craftsmanship with modern convenience
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Authentic Products</h3>
-              <p className="text-gray-600">
-                Every product is handcrafted by skilled artisans using traditional techniques passed down through generations.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-gray-400 mb-4">
+                <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Fast Delivery</h3>
-              <p className="text-gray-600">
-                Quick and secure delivery across India with careful packaging to ensure your products arrive safely.
-              </p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No products available</h3>
+              <p className="text-gray-600 mb-4">Products will appear here once added to the database</p>
+              <Link 
+                to="/products" 
+                className="bg-gradient-to-r from-pink-600 to-yellow-400 text-white px-6 py-3 rounded-full font-semibold text-lg hover:scale-105 transition shadow"
+              >
+                Browse All Products
+              </Link>
             </div>
+          )}
+        </div>
+      </section>
 
-            <div className="text-center">
-              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Customer Satisfaction</h3>
-              <p className="text-gray-600">
-                We're committed to your satisfaction with easy returns and excellent customer support.
+      {/* About Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">About Marwari Basket</h2>
+              <p className="text-gray-600 mb-6">
+                We are passionate about bringing the authentic flavors and traditions of Rajasthan to your doorstep. 
+                Our carefully curated collection features handcrafted products that tell the story of this vibrant state.
               </p>
+              <p className="text-gray-600 mb-8">
+                From traditional textiles to exquisite jewelry, each item in our collection is sourced directly from 
+                skilled artisans who have been preserving these crafts for generations.
+              </p>
+              <Link to="/about">
+                <button className="bg-gradient-to-r from-pink-600 to-yellow-400 text-white font-bold px-6 py-3 rounded-lg hover:scale-105 transition-all">
+                  Learn More
+                </button>
+              </Link>
+            </div>
+            <div className="relative">
+              <div className="bg-gradient-to-br from-yellow-100 to-pink-100 rounded-lg p-8">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-gray-900 mb-2">100%</div>
+                  <div className="text-lg text-gray-600">Authentic Products</div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900">50+</div>
+                    <div className="text-sm text-gray-600">Artisans</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900">1000+</div>
+                    <div className="text-sm text-gray-600">Happy Customers</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-16 bg-gradient-to-r from-yellow-400 to-orange-500">
+      <section className="py-16 bg-gradient-to-r from-pink-600 to-yellow-400">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
-          <p className="text-yellow-100 mb-8 text-lg">
-            Subscribe to our newsletter for exclusive offers and new product updates
+          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
+            Subscribe to our newsletter for the latest products, exclusive offers, and Rajasthani culture insights.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-400"
+              className="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-pink-600"
             />
-            <button className="bg-white text-yellow-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
+            <button className="bg-white text-pink-600 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
               Subscribe
             </button>
           </div>

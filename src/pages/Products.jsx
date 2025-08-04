@@ -1,24 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { products, categories, getProductsByCategory, searchProducts } from '../utils/productData';
+import { fetchProducts } from '../utils/products';
 import ProductCard from '../components/ProductCard';
 
 export default function Products() {
-  const [allProducts, setAllProducts] = useState(products);
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [allProducts, setAllProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Simulate API call
+  // Fetch products from API
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setAllProducts(products);
-      setFilteredProducts(products);
-      setLoading(false);
-    }, 500);
+    async function loadProducts() {
+      setLoading(true);
+      setError('');
+      try {
+        const data = await fetchProducts();
+        setAllProducts(data.products || data || []);
+        setFilteredProducts(data.products || data || []);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+        setError('Failed to load products. Please try again.');
+        setAllProducts([]);
+        setFilteredProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProducts();
   }, []);
 
   // Filter and search products
@@ -27,15 +39,17 @@ export default function Products() {
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = getProductsByCategory(selectedCategory);
+      filtered = filtered.filter(product => product.category === selectedCategory);
     }
 
     // Filter by search query
     if (searchQuery.trim()) {
-      filtered = searchProducts(searchQuery);
-      if (selectedCategory !== 'all') {
-        filtered = filtered.filter(product => product.category === selectedCategory);
-      }
+      const lowercaseQuery = searchQuery.toLowerCase();
+      filtered = filtered.filter(product => 
+        product.name.toLowerCase().includes(lowercaseQuery) ||
+        product.description.toLowerCase().includes(lowercaseQuery) ||
+        (product.tags && product.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery)))
+      );
     }
 
     // Sort products
@@ -47,10 +61,10 @@ export default function Products() {
         filtered = [...filtered].sort((a, b) => b.price - a.price);
         break;
       case 'rating':
-        filtered = [...filtered].sort((a, b) => b.rating - a.rating);
+        filtered = [...filtered].sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
       case 'newest':
-        filtered = [...filtered].sort((a, b) => b.id - a.id);
+        filtered = [...filtered].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         break;
       default:
         // Featured - keep original order
@@ -128,11 +142,7 @@ export default function Products() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
               >
                 <option value="all">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name} ({category.productCount})
-                  </option>
-                ))}
+                {/* Categories will be loaded from API */}
               </select>
             </div>
 
@@ -169,8 +179,27 @@ export default function Products() {
           )}
         </div>
 
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <div className="text-red-400 mb-4">
+              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to load products</h3>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-yellow-400 text-black px-4 py-2 rounded-lg font-medium hover:bg-yellow-500 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
         {/* Loading State */}
-        {loading ? (
+        {loading && !error ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm border p-4 animate-pulse">
@@ -183,13 +212,13 @@ export default function Products() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : !loading && !error ? (
           <>
             {/* Products Grid */}
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product._id || product.id} product={product} />
                 ))}
               </div>
             ) : (
@@ -213,7 +242,7 @@ export default function Products() {
               </div>
             )}
           </>
-        )}
+        ) : null}
       </div>
     </div>
   );

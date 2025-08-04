@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'https://marwari-basket-rv0apvs5x-priyanshu-dahiyas-projects-890341ab.vercel.app',
     trace: 'on-first-retry',
   },
   projects: [
@@ -33,10 +33,5 @@ export default defineConfig({
       use: { ...devices['iPhone 12'] },
     },
   ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-  },
   globalSetup: undefined,
 }); 

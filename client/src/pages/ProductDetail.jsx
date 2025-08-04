@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { getProductById, getProductsByCategory } from '../utils/productData';
+import { fetchProductById, fetchProducts } from '../utils/products';
 import { toast } from 'react-hot-toast';
 
 export default function ProductDetail() {
@@ -13,28 +13,32 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
+      setError('');
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const foundProduct = getProductById(parseInt(id));
+        const foundProduct = await fetchProductById(id);
         if (foundProduct) {
           setProduct(foundProduct);
           setSelectedImage(0);
           
           // Get related products from same category
-          const related = getProductsByCategory(foundProduct.category)
-            .filter(p => p.id !== foundProduct.id)
+          const allProducts = await fetchProducts();
+          const products = allProducts.products || allProducts || [];
+          const related = products
+            .filter(p => p.category === foundProduct.category && p._id !== foundProduct._id)
             .slice(0, 4);
           setRelatedProducts(related);
         } else {
+          setError('Product not found');
           toast.error('Product not found');
         }
-      } catch {
+      } catch (err) {
+        console.error('Failed to load product:', err);
+        setError('Failed to load product');
         toast.error('Failed to load product');
       } finally {
         setLoading(false);
@@ -50,10 +54,10 @@ export default function ProductDetail() {
     setAddingToCart(true);
     try {
       await addToCart({
-        id: product.id,
+        id: product._id || product.id,
         name: product.name,
         price: product.price,
-        image: product.image,
+        image: product.images?.[0] || product.image,
         quantity: quantity
       });
       toast.success(`${product.name} added to cart!`);
@@ -65,7 +69,7 @@ export default function ProductDetail() {
   };
 
   const handleQuantityChange = (newQuantity) => {
-    if (newQuantity >= 1 && newQuantity <= product.stock) {
+    if (newQuantity >= 1 && newQuantity <= (product.stock || 1)) {
       setQuantity(newQuantity);
     }
   };
@@ -81,11 +85,12 @@ export default function ProductDetail() {
     );
   }
 
-  if (!product) {
+  if (error || !product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
+          <p className="text-gray-600 mb-6">{error || 'The product you are looking for does not exist.'}</p>
           <Link to="/products" className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-medium hover:bg-yellow-500 transition-colors">
             Back to Products
           </Link>
@@ -293,10 +298,10 @@ export default function ProductDetail() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
-                <div key={relatedProduct.id} className="bg-white rounded-lg shadow-sm border p-4">
-                  <Link to={`/product/${relatedProduct.id}`}>
+                <div key={relatedProduct._id || relatedProduct.id} className="bg-white rounded-lg shadow-sm border p-4">
+                  <Link to={`/product/${relatedProduct._id || relatedProduct.id}`}>
                     <img
-                      src={relatedProduct.image}
+                      src={relatedProduct.images?.[0] || relatedProduct.image}
                       alt={relatedProduct.name}
                       className="w-full h-32 object-cover rounded-lg mb-3"
                     />

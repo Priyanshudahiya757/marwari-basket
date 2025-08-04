@@ -28,7 +28,7 @@ import Breadcrumbs from './components/Breadcrumbs';
 import BackToTop from './components/BackToTop';
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './utils/mockApi'; // Import mock API for development
+// Mock API removed - using real backend
 import AdminLogin from './pages/admin/login';
 
 function KonamiCode() {
