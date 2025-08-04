@@ -14,8 +14,10 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('Admin dashboard page loading...');
     // Simulate loading time for widgets
     const timer = setTimeout(() => {
+      console.log('Admin dashboard loading complete');
       setIsLoading(false);
     }, 1000);
 

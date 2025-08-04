@@ -15,21 +15,28 @@ function AdminLoginForm() {
     e.preventDefault();
     setFormLoading(true);
     try {
+      console.log('Attempting admin login...');
       const res = await api.post('/auth/login', {
         emailOrMobile,
         password,
       });
       
+      console.log('Login response:', res.data);
+      
       // Check if user is admin
       if (res.data.user && res.data.user.role === 'admin') {
+        console.log('Admin login successful, setting token and redirecting...');
         setUserToken(res.data.token);
         toast.success('Admin login successful!');
+        console.log('Navigating to /admin...');
         navigate('/admin'); // Redirect to admin dashboard
       } else {
+        console.log('User is not admin:', res.data.user);
         toast.error('Access denied. Admin privileges required.');
         // Don't set token or redirect for non-admin users
       }
-    } catch {
+    } catch (error) {
+      console.error('Admin login error:', error);
       // Error handled by Axios interceptor
     } finally {
       setFormLoading(false);
