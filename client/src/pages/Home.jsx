@@ -48,43 +48,36 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-yellow-400 via-orange-500 to-pink-500 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className={`text-white ${animateHero ? 'animate-fade-in' : 'opacity-0'}`}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-                Welcome to{' '}
-                <span className="text-yellow-300">Marwari Basket</span>
-              </h1>
-              <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-100 leading-relaxed">
-                Discover authentic Rajasthani products handpicked for you. 
-                From traditional clothing to exquisite jewelry, find everything 
-                that makes Rajasthan special.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/products"
-                  className="bg-white text-orange-600 px-6 md:px-8 py-4 md:py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg text-center"
-                >
-                  Shop Now
-                </Link>
-                <Link
-                  to="/about"
-                  className="border-2 border-white text-white px-6 md:px-8 py-4 md:py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300 text-center"
-                >
-                  Learn More
-                </Link>
-              </div>
-            </div>
-            <div className={`${animateHero ? 'animate-slide-in' : 'opacity-0 translate-x-12'} flex justify-center lg:justify-end`}>
-              <img
-                src={camelImg}
-                alt="Rajasthani Camel"
-                className="w-full h-auto max-w-sm md:max-w-md lg:max-w-lg"
-              />
-            </div>
+      <section className="flex flex-row items-center justify-between gap-4 px-4 py-6 bg-white rounded-xl shadow mt-4 mb-8 overflow-hidden">
+        {/* Left: Text & Buttons */}
+        <div className="flex-1 flex flex-col justify-center gap-3">
+          <h1 className="text-2xl font-semibold text-orange-700 font-serif mb-1">Marwari Basket</h1>
+          <p className="text-sm leading-snug text-gray-700 mb-2">
+            Discover authentic Rajasthani products handpicked for you. From traditional clothing to exquisite jewelry, find everything that makes Rajasthan special.
+          </p>
+          <div className="flex flex-col gap-2 mt-2">
+            <Link
+              to="/products"
+              className="bg-orange-500 text-white rounded-full px-5 py-2 text-base font-medium uppercase tracking-wide shadow-md hover:bg-orange-600 transition-transform hover:scale-105 text-center"
+            >
+              Shop Now
+            </Link>
+            <Link
+              to="/about"
+              className="border border-orange-500 text-orange-500 rounded-full px-5 py-2 text-base font-medium uppercase tracking-wide mt-1 text-center hover:bg-orange-50 transition"
+            >
+              Learn More
+            </Link>
           </div>
+        </div>
+        {/* Right: Camel Image */}
+        <div className="flex-shrink-0 flex items-center justify-center ml-2">
+          <img
+            src={camelImg}
+            alt="Rajasthani Camel"
+            className="w-24 h-24 md:w-40 md:h-40 object-contain rounded-xl"
+            style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
+          />
         </div>
       </section>
 
