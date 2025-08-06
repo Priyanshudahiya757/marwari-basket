@@ -29,24 +29,28 @@ function App() {
     <Router>
       <UserProvider>
         <CartProvider>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col min-h-screen bg-gray-100">
             <Navbar />
             <main className="flex-grow pt-16 pb-20 md:pb-0">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/my-account" element={<MyAccount />} />
-                <Route path="/my-orders" element={<MyOrders />} />
-                <Route path="/order/:id" element={<OrderDetail />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <div className="container">
+                <section className="section">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/my-account" element={<MyAccount />} />
+                    <Route path="/my-orders" element={<MyOrders />} />
+                    <Route path="/order/:id" element={<OrderDetail />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </section>
+              </div>
             </main>
             <Footer />
             <BottomNav />
