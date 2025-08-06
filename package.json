@@ -7,10 +7,10 @@
     "node": ">=18.0.0 <22.0.0"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "lint": "cd client && npm run lint",
+    "preview": "cd client && npm run preview"
   },
   "dependencies": {
     "@playwright/test": "^1.54.2",
