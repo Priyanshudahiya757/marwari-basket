@@ -30,53 +30,53 @@ export default function ProductCard({ product }) {
     : 0;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 group">
+    <div className="bg-white rounded-xl shadow-sm border hover:shadow-lg transition-all duration-200 group h-full flex flex-col">
       {/* Product Image */}
-      <Link to={`/product/${product.id}`} className="block relative overflow-hidden rounded-t-lg">
+      <Link to={`/product/${product.id}`} className="block relative overflow-hidden rounded-t-xl flex-shrink-0">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
+          className="w-full h-48 md:h-52 object-cover group-hover:scale-105 transition-transform duration-200"
         />
         {discountPercentage > 0 && (
-          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">
             -{discountPercentage}%
           </div>
         )}
         {product.stock < 10 && product.stock > 0 && (
-          <div className="absolute top-2 right-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded">
+          <div className="absolute top-2 right-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-lg">
             Only {product.stock} left
           </div>
         )}
         {product.stock === 0 && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <span className="text-white font-bold">Out of Stock</span>
+            <span className="text-white font-bold text-sm">Out of Stock</span>
           </div>
         )}
       </Link>
 
       {/* Product Info */}
-      <div className="p-4">
+      <div className="p-4 flex-grow flex flex-col">
         {/* Category */}
-        <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-          {product.category.replace('-', ' ')}
+        <div className="text-xs text-gray-500 uppercase tracking-wide mb-2">
+          {product.category?.replace('-', ' ') || 'Product'}
         </div>
 
         {/* Product Name */}
-        <Link to={`/product/${product.id}`} className="block">
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-yellow-600 transition-colors">
+        <Link to={`/product/${product.id}`} className="block flex-grow">
+          <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 hover:text-yellow-600 transition-colors text-sm md:text-base leading-tight">
             {product.name}
           </h3>
         </Link>
 
         {/* Rating */}
-        <div className="flex items-center mb-2">
+        <div className="flex items-center mb-3">
           <div className="flex items-center">
             {[...Array(5)].map((_, index) => (
               <svg
                 key={index}
-                className={`w-4 h-4 ${
-                  index < Math.floor(product.rating)
+                className={`w-3 h-3 md:w-4 md:h-4 ${
+                  index < Math.floor(product.rating || 0)
                     ? 'text-yellow-400'
                     : 'text-gray-300'
                 }`}
@@ -87,15 +87,15 @@ export default function ProductCard({ product }) {
               </svg>
             ))}
           </div>
-          <span className="text-sm text-gray-600 ml-1">
-            {product.rating} ({product.reviews})
+          <span className="text-xs md:text-sm text-gray-600 ml-1">
+            {product.rating || 0} ({product.reviews || 0})
           </span>
         </div>
 
         {/* Price */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-lg font-bold text-gray-900">
-            ₹{product.price.toLocaleString()}
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-lg md:text-xl font-bold text-gray-900">
+            ₹{(product.price || 0).toLocaleString()}
           </span>
           {product.originalPrice && (
             <span className="text-sm text-gray-500 line-through">
@@ -108,20 +108,20 @@ export default function ProductCard({ product }) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || isAddingToCart}
-          className="w-full bg-yellow-400 text-black py-2 px-4 rounded-lg font-medium hover:bg-yellow-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200"
+          className="w-full bg-yellow-400 text-black py-3 px-4 rounded-lg font-medium hover:bg-yellow-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 text-sm md:text-base touch-manipulation"
         >
           {isAddingToCart ? 'Adding...' : product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
         </button>
 
         {/* Quick Actions */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-          <button className="text-sm text-gray-600 hover:text-yellow-600 transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+          <button className="p-2 text-gray-600 hover:text-yellow-600 transition-colors rounded-lg hover:bg-yellow-50">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </button>
-          <button className="text-sm text-gray-600 hover:text-yellow-600 transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="p-2 text-gray-600 hover:text-yellow-600 transition-colors rounded-lg hover:bg-yellow-50">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
             </svg>
           </button>

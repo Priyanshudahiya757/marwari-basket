@@ -1,9 +1,19 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const { ensureConnection } = require('../config/db');
 
 // Get all products with filtering and pagination
 exports.getAllProducts = async (req, res) => {
   try {
+    console.log('📦 Fetching products with filters:', req.query);
+    
+    // Ensure database connection
+    const dbConnected = await ensureConnection();
+    if (!dbConnected) {
+      console.error('❌ Database not connected during product fetch');
+      return res.status(503).json({ message: 'Service temporarily unavailable' });
+    }
+    
     const { status, category, search, page = 1, limit = 20 } = req.query;
     const query = {};
     
@@ -26,47 +36,89 @@ exports.getAllProducts = async (req, res) => {
     
     const total = await Product.countDocuments(query);
     
+    console.log(`✅ Fetched ${products.length} products out of ${total} total`);
+    
     res.json({
-      products,
+      products: products || [],
       totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      total
+      currentPage: parseInt(page),
+      total: total || 0
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('❌ Product fetch error:', error.message);
+    res.status(500).json({ message: 'Failed to fetch products. Please try again.' });
   }
 };
 
 // Get a single product by ID
 exports.getProductById = async (req, res) => {
   try {
+    console.log('📦 Fetching product by ID:', req.params.id);
+    
+    // Ensure database connection
+    const dbConnected = await ensureConnection();
+    if (!dbConnected) {
+      console.error('❌ Database not connected during product fetch');
+      return res.status(503).json({ message: 'Service temporarily unavailable' });
+    }
+    
     const product = await Product.findById(req.params.id)
       .populate('category', 'name')
       .populate('createdBy', 'name');
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+      
+    if (!product) {
+      console.log('❌ Product not found:', req.params.id);
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    
+    console.log('✅ Product fetched successfully:', product.name);
     res.json(product);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('❌ Product fetch error:', error.message);
+    res.status(500).json({ message: 'Failed to fetch product. Please try again.' });
   }
 };
 
 // Generate unique SKU
 const generateSKU = async (name) => {
-  const prefix = name.substring(0, 3).toUpperCase();
-  const timestamp = Date.now().toString().slice(-6);
-  const sku = `${prefix}${timestamp}`;
-  const exists = await Product.findOne({ sku });
-  return exists ? generateSKU(name) : sku;
+  try {
+    const prefix = name.substring(0, 3).toUpperCase();
+    const timestamp = Date.now().toString().slice(-6);
+    const sku = `${prefix}${timestamp}`;
+    const exists = await Product.findOne({ sku });
+    return exists ? generateSKU(name) : sku;
+  } catch (error) {
+    console.error('❌ SKU generation error:', error.message);
+    throw new Error('Failed to generate SKU');
+  }
 };
 
 // Create a new product (admin only)
 exports.createProduct = async (req, res) => {
   try {
+    console.log('📦 Creating new product:', req.body.name);
+    
+    // Ensure database connection
+    const dbConnected = await ensureConnection();
+    if (!dbConnected) {
+      console.error('❌ Database not connected during product creation');
+      return res.status(503).json({ message: 'Service temporarily unavailable' });
+    }
+    
     const { name, price, description, images, stock, category, status, seo, availableFrom, availableTo, flashSale } = req.body;
     
+    // Validate required fields
+    if (!name || !price) {
+      return res.status(400).json({ message: 'Name and price are required' });
+    }
+    
     // Validate category exists
-    const categoryExists = await Category.findById(category);
-    if (!categoryExists) return res.status(400).json({ message: 'Category not found' });
+    if (category) {
+      const categoryExists = await Category.findById(category);
+      if (!categoryExists) {
+        return res.status(400).json({ message: 'Category not found' });
+      }
+    }
     
     // Generate SKU
     const sku = await generateSKU(name);
@@ -77,52 +129,54 @@ exports.createProduct = async (req, res) => {
       price,
       description,
       images: images || [],
-      stock,
+      stock: stock || 0,
       category,
-      status,
+      status: status || 'active',
       seo,
       availableFrom,
       availableTo,
       flashSale,
-      createdBy: req.user._id
+      createdBy: req.user?._id
     });
     
     await product.save();
+    console.log('✅ Product created successfully:', product.name);
     res.status(201).json(product);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('❌ Product creation error:', error.message);
+    res.status(500).json({ message: 'Failed to create product. Please try again.' });
   }
 };
 
 // Update a product (admin only)
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    console.log('📦 Updating product:', req.params.id);
     
-    const { name, price, description, images, stock, category, status, seo, availableFrom, availableTo, flashSale } = req.body;
-    
-    if (category) {
-      const categoryExists = await Category.findById(category);
-      if (!categoryExists) return res.status(400).json({ message: 'Category not found' });
-      product.category = category;
+    // Ensure database connection
+    const dbConnected = await ensureConnection();
+    if (!dbConnected) {
+      console.error('❌ Database not connected during product update');
+      return res.status(503).json({ message: 'Service temporarily unavailable' });
     }
     
-    product.name = name || product.name;
-    product.price = price !== undefined ? price : product.price;
-    product.description = description || product.description;
-    product.images = images || product.images;
-    product.stock = stock !== undefined ? stock : product.stock;
-    product.status = status || product.status;
-    product.seo = seo || product.seo;
-    product.availableFrom = availableFrom || product.availableFrom;
-    product.availableTo = availableTo || product.availableTo;
-    product.flashSale = flashSale || product.flashSale;
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      console.log('❌ Product not found for update:', req.params.id);
+      return res.status(404).json({ message: 'Product not found' });
+    }
     
-    await product.save();
-    res.json(product);
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    
+    console.log('✅ Product updated successfully:', updatedProduct.name);
+    res.json(updatedProduct);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('❌ Product update error:', error.message);
+    res.status(500).json({ message: 'Failed to update product. Please try again.' });
   }
 };
 

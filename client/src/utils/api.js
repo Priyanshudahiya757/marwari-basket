@@ -1,11 +1,17 @@
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
+// Debug: Log the API base URL
+console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL);
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
   },
 });
 
@@ -16,6 +22,15 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // Add cache-busting parameter for GET requests
+    if (config.method === 'get') {
+      config.params = {
+        ...config.params,
+        _t: Date.now()
+      };
+    }
+    
     return config;
   },
   (error) => {
@@ -31,10 +46,18 @@ api.interceptors.response.use(
     
     // Handle specific error cases
     if (error.response?.status === 401) {
-      // Unauthorized - clear token and redirect to login
+      // Unauthorized - clear token and redirect to appropriate login
       localStorage.removeItem('token');
-      window.location.href = '/login';
-      toast.error('Session expired. Please login again.');
+      
+      // Check if we're on an admin route
+      const currentPath = window.location.pathname;
+      if (currentPath.includes('/admin')) {
+        window.location.href = '/admin/login';
+        toast.error('Admin session expired. Please login again.');
+      } else {
+        window.location.href = '/login';
+        toast.error('Session expired. Please login again.');
+      }
     } else if (error.response?.status === 403) {
       toast.error('Access denied. You do not have permission for this action.');
     } else if (error.response?.status === 404) {

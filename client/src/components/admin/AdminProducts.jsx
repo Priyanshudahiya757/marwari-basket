@@ -56,7 +56,7 @@ function AdminProducts() {
     e.preventDefault();
     setEditLoading(true);
     try {
-      const res = await api.put(`/api/products/${editId}`, {
+      const res = await api.put(`/products/${editId}`, {
         ...editForm,
         price: Number(editForm.price),
         stock: Number(editForm.stock),
@@ -77,7 +77,7 @@ function AdminProducts() {
   const handleDelete = async (product) => {
     if (!window.confirm(`Delete product "${product.name}"?`)) return;
     try {
-      await api.delete(`/api/products/${product._id}`, {
+      await api.delete(`/products/${product._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProducts((prev) => prev.filter((p) => p._id !== product._id));
@@ -95,7 +95,7 @@ function AdminProducts() {
     e.preventDefault();
     setAddLoading(true);
     try {
-      const res = await api.post('/api/products', {
+      const res = await api.post('/products', {
         ...addForm,
         price: Number(addForm.price),
         stock: Number(addForm.stock),

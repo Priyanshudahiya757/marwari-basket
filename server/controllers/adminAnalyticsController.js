@@ -143,7 +143,7 @@ const getProductAnalytics = async (req, res) => {
     // Calculate metrics
     const totalProducts = products.length;
     const activeProducts = products.filter(p => p.status === 'active').length;
-    const lowStockProducts = products.filter(p => p.stock <= p.minStock).length;
+    const lowStockProducts = products.filter(p => p.stock <= (p.minStock || 10)).length;
     const outOfStockProducts = products.filter(p => p.stock === 0).length;
 
     // Get top sellers
@@ -168,21 +168,13 @@ const getProductAnalytics = async (req, res) => {
       .sort((a, b) => b.sales - a.sales)
       .slice(0, 5);
 
-    // Mock category performance
-    const categoryPerformance = [
-      { name: 'Clothing', revenue: 45000, products: 25, growth: 15.2 },
-      { name: 'Jewelry', revenue: 32000, products: 18, growth: 12.8 },
-      { name: 'Home Decor', revenue: 28000, products: 22, growth: 8.5 },
-      { name: 'Food & Spices', revenue: 20000, products: 15, growth: 22.1 }
-    ];
-
     // Get stock alerts
     const stockAlerts = products
-      .filter(p => p.stock <= p.minStock)
+      .filter(p => p.stock <= (p.minStock || 10))
       .map(p => ({
         name: p.name,
         currentStock: p.stock,
-        minStock: p.minStock,
+        minStock: p.minStock || 10,
         daysLeft: Math.floor(p.stock / 2) // Mock calculation
       }))
       .slice(0, 4);
@@ -193,7 +185,7 @@ const getProductAnalytics = async (req, res) => {
       lowStockProducts,
       outOfStockProducts,
       topSellers,
-      categoryPerformance,
+      categoryPerformance: [], // Empty for fresh start
       stockAlerts
     });
   } catch (error) {
@@ -247,13 +239,6 @@ const getCustomerAnalytics = async (req, res) => {
     });
     const repeatCustomers = Object.values(customerOrderCounts).filter(count => count > 1).length;
 
-    // Get customer segments
-    const customerSegments = [
-      { name: 'New', count: Math.floor(totalCustomers * 0.36), percentage: 36, avgOrderValue: 150 },
-      { name: 'Regular', count: Math.floor(totalCustomers * 0.544), percentage: 54.4, avgOrderValue: 280 },
-      { name: 'VIP', count: Math.floor(totalCustomers * 0.096), percentage: 9.6, avgOrderValue: 850 }
-    ];
-
     // Get top customers
     const customerSpending = {};
     orders.forEach(order => {
@@ -287,31 +272,15 @@ const getCustomerAnalytics = async (req, res) => {
         };
       });
 
-    // Mock retention and acquisition data
-    const customerRetention = {
-      oneMonth: 85,
-      threeMonth: 72,
-      sixMonth: 58,
-      oneYear: 45
-    };
-
-    const customerAcquisition = [
-      { source: 'Organic Search', customers: Math.floor(totalCustomers * 0.256), percentage: 25.6 },
-      { source: 'Social Media', customers: Math.floor(totalCustomers * 0.224), percentage: 22.4 },
-      { source: 'Direct Traffic', customers: Math.floor(totalCustomers * 0.2), percentage: 20 },
-      { source: 'Referrals', customers: Math.floor(totalCustomers * 0.16), percentage: 16 },
-      { source: 'Email Marketing', customers: Math.floor(totalCustomers * 0.16), percentage: 16 }
-    ];
-
     res.json({
       totalCustomers,
       newCustomers,
       activeCustomers,
       repeatCustomers,
-      customerSegments,
+      customerSegments: [], // Empty for fresh start
       topCustomers,
-      customerRetention,
-      customerAcquisition
+      customerRetention: { oneMonth: 0, threeMonth: 0, sixMonth: 0, oneYear: 0 },
+      customerAcquisition: [] // Empty for fresh start
     });
   } catch (error) {
     console.error('Error fetching customer analytics:', error);
@@ -322,76 +291,13 @@ const getCustomerAnalytics = async (req, res) => {
 // Get traffic analytics data
 const getTrafficAnalytics = async (req, res) => {
   try {
-    const { range = '30d' } = req.query;
-    
-    // Mock traffic data (in a real app, this would come from Google Analytics or similar)
-    const totalVisitors = 15420;
-    const uniqueVisitors = 12350;
-    const pageViews = 45680;
-    const bounceRate = 35.2;
-    const avgSessionDuration = 245;
-    const conversionRate = 2.8;
-
-    const trafficSources = [
-      { source: 'Organic Search', visitors: 6200, percentage: 40.2, conversion: 3.2 },
-      { source: 'Direct Traffic', visitors: 3850, percentage: 25.0, conversion: 2.8 },
-      { source: 'Social Media', visitors: 3080, percentage: 20.0, conversion: 2.1 },
-      { source: 'Referrals', visitors: 1540, percentage: 10.0, conversion: 2.5 },
-      { source: 'Email Marketing', visitors: 750, percentage: 4.8, conversion: 4.2 }
-    ];
-
-    const topPages = [
-      { page: '/products', views: 12500, visitors: 8900, bounceRate: 28.5 },
-      { page: '/product/traditional-dress', views: 8500, visitors: 6200, bounceRate: 22.1 },
-      { page: '/cart', views: 6800, visitors: 4500, bounceRate: 15.8 },
-      { page: '/checkout', views: 4200, visitors: 3200, bounceRate: 8.5 },
-      { page: '/about', views: 3800, visitors: 2800, bounceRate: 45.2 }
-    ];
-
-    const deviceBreakdown = [
-      { device: 'Desktop', visitors: 9250, percentage: 60.0 },
-      { device: 'Mobile', visitors: 4625, percentage: 30.0 },
-      { device: 'Tablet', visitors: 1545, percentage: 10.0 }
-    ];
-
-    // Generate daily traffic data
-    const dailyTraffic = [];
-    const endDate = new Date();
-    const startDate = new Date();
-    
-    switch (range) {
-      case '7d':
-        startDate.setDate(endDate.getDate() - 7);
-        break;
-      case '30d':
-        startDate.setDate(endDate.getDate() - 30);
-        break;
-      case '90d':
-        startDate.setDate(endDate.getDate() - 90);
-        break;
-      case '1y':
-        startDate.setFullYear(endDate.getFullYear() - 1);
-        break;
-      default:
-        startDate.setDate(endDate.getDate() - 30);
-    }
-
-    const currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
-      const baseVisitors = 2000 + Math.random() * 1000;
-      const visitors = Math.floor(baseVisitors);
-      const pageViews = Math.floor(visitors * (2.5 + Math.random() * 1.5));
-      const conversions = Math.floor(visitors * (0.02 + Math.random() * 0.02));
-      
-      dailyTraffic.push({
-        date: currentDate.toISOString().split('T')[0],
-        visitors,
-        pageViews,
-        conversions
-      });
-      
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
+    // Return zeros for fresh start - in a real app, this would come from Google Analytics
+    const totalVisitors = 0;
+    const uniqueVisitors = 0;
+    const pageViews = 0;
+    const bounceRate = 0;
+    const avgSessionDuration = 0;
+    const conversionRate = 0;
 
     res.json({
       totalVisitors,
@@ -400,10 +306,10 @@ const getTrafficAnalytics = async (req, res) => {
       bounceRate,
       avgSessionDuration,
       conversionRate,
-      trafficSources,
-      topPages,
-      deviceBreakdown,
-      dailyTraffic
+      trafficSources: [], // Empty for fresh start
+      topPages: [], // Empty for fresh start
+      deviceBreakdown: [], // Empty for fresh start
+      dailyTraffic: [] // Empty for fresh start
     });
   } catch (error) {
     console.error('Error fetching traffic analytics:', error);

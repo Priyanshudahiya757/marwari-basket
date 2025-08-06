@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { orderAPI } from "../utils/api";
 
 const statusOptions = ["pending", "processing", "shipped", "delivered"];
 
@@ -15,15 +15,26 @@ export default function Orders() {
 
   async function fetchOrders() {
     setLoading(true);
-    const res = await axios.get("http://localhost:5000/api/orders", { headers });
-    setOrders(res.data);
-    setLoading(false);
+    try {
+      const res = await orderAPI.getAllOrders();
+      setOrders(res.data);
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleStatusChange(orderId, newStatus) {
     setLoading(true);
-    await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, { status: newStatus }, { headers });
-    fetchOrders();
+    try {
+      await orderAPI.updateOrderStatus(orderId, { status: newStatus });
+      fetchOrders();
+    } catch (error) {
+      console.error("Failed to update order status:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

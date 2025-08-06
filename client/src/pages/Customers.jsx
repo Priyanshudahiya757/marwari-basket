@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { adminAPI } from "../utils/api";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
   const [selected, setSelected] = useState(null);
   const [orderHistory, setOrderHistory] = useState([]);
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
     fetchCustomers();
@@ -15,17 +13,27 @@ export default function Customers() {
 
   async function fetchCustomers() {
     setLoading(true);
-    const res = await axios.get("http://localhost:5000/api/customers", { headers });
-    setCustomers(res.data);
-    setLoading(false);
+    try {
+      const res = await adminAPI.getAllUsers();
+      setCustomers(res.data);
+    } catch (error) {
+      console.error("Failed to fetch customers:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleView(customer) {
     setSelected(customer);
     setLoading(true);
-    const res = await axios.get(`http://localhost:5000/api/customers/${customer._id}`, { headers });
-    setOrderHistory(res.data.orders || []);
-    setLoading(false);
+    try {
+      const res = await adminAPI.getUserById(customer._id);
+      setOrderHistory(res.data.orders || []);
+    } catch (error) {
+      console.error("Failed to fetch customer details:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleClose() {

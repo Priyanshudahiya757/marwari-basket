@@ -17,7 +17,7 @@ function AdminOrders() {
       setLoading(true);
       setError('');
       try {
-        const res = await api.get('/api/orders', {
+        const res = await api.get('/orders', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data);
@@ -33,7 +33,7 @@ function AdminOrders() {
   const handleStatusChange = async (orderId, status) => {
     setUpdating(orderId);
     try {
-      const res = await api.put(`/api/orders/${orderId}/status`, { status }, {
+              const res = await api.put(`/orders/${orderId}/status`, { status }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders((prev) => prev.map((o) => (o._id === orderId ? res.data : o)));

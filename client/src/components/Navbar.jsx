@@ -101,6 +101,7 @@ export default function Navbar() {
         <Link to="/" onClick={handleLogoClick} className="font-extrabold text-2xl md:text-3xl bg-gradient-to-r from-pink-600 via-yellow-400 to-orange-600 bg-clip-text text-transparent font-serif tracking-tight select-none">
           Marwari Basket
         </Link>
+        
         {/* Desktop Nav Links */}
         <ul className="hidden md:flex gap-8 items-center font-medium text-lg">
           {navLinks.map(link => (
@@ -115,8 +116,9 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-        {/* Cart Icon */}
-        <Link to="/cart" className="relative ml-4">
+        
+        {/* Desktop Cart Icon */}
+        <Link to="/cart" className="relative hidden md:block ml-4">
           <span className="bg-pink-600 text-white rounded-xl px-3 py-2 text-xl shadow hover:bg-pink-700 transition-all cursor-pointer">
             🛒
           </span>
@@ -126,8 +128,9 @@ export default function Navbar() {
             </span>
           )}
         </Link>
-        {/* Auth Buttons / User Dropdown */}
-        <div className="ml-4 flex items-center gap-2 relative" ref={dropdownRef}>
+        
+        {/* Desktop Auth Buttons / User Dropdown */}
+        <div className="hidden md:flex ml-4 items-center gap-2 relative" ref={dropdownRef}>
           {!loggedIn ? (
             <Link to="/login" className="bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full font-semibold shadow hover:bg-pink-50 transition">
               Login
@@ -144,13 +147,13 @@ export default function Navbar() {
               </button>
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-neutral-200 rounded-lg shadow-lg z-50">
-                  <Link to="/account" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setDropdownOpen(false)}>
+                  <Link to="/my-account" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setDropdownOpen(false)}>
                     <div className="flex items-center gap-2">
                       <span className="text-lg">👤</span>
                       My Account
                     </div>
                   </Link>
-                  <Link to="/orders" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setDropdownOpen(false)}>
+                  <Link to="/my-orders" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setDropdownOpen(false)}>
                     <div className="flex items-center gap-2">
                       <span className="text-lg">📦</span>
                       My Orders
@@ -172,7 +175,8 @@ export default function Navbar() {
             </div>
           )}
         </div>
-        {/* Mobile Menu Button */}
+        
+        {/* Mobile Menu Button - Only show on mobile */}
         <button
           className="md:hidden ml-4 text-3xl text-neutral-700 focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -181,7 +185,8 @@ export default function Navbar() {
           {menuOpen ? '✕' : '☰'}
         </button>
       </nav>
-      {/* Mobile Nav */}
+      
+      {/* Mobile Nav - Only show on mobile */}
       {menuOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-lg border-t border-neutral-200 shadow-lg px-6 py-4 flex flex-col gap-4">
           {navLinks.map(link => (
@@ -209,13 +214,13 @@ export default function Navbar() {
             </Link>
           ) : (
             <>
-              <Link to="/account" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setMenuOpen(false)}>
+              <Link to="/my-account" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setMenuOpen(false)}>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">👤</span>
                   My Account
                 </div>
               </Link>
-              <Link to="/orders" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setMenuOpen(false)}>
+              <Link to="/my-orders" className="block px-4 py-2 hover:bg-pink-50 transition-colors" onClick={() => setMenuOpen(false)}>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">📦</span>
                   My Orders
