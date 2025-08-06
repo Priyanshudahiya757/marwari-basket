@@ -30,10 +30,6 @@ function App() {
       <UserProvider>
         <CartProvider>
           <div className="flex flex-col min-h-screen">
-            {/* Test banner to confirm mobile UI is loading */}
-            <div className="w-full bg-green-500 text-white text-center py-2 text-xs font-bold z-[9999] fixed top-0 left-0 right-0 shadow-lg">
-              🎯 MOBILE UI TEST - Bottom Nav Should Be Visible Below
-            </div>
             <Navbar />
             <main className="flex-grow pt-16 pb-20 md:pb-0">
               <Routes>
