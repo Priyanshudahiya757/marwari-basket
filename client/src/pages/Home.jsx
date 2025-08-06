@@ -47,41 +47,33 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - Screenshot Inspired */}
       <section
-        className="relative flex flex-row items-center justify-between gap-4 px-4 py-8 md:py-14 bg-gradient-to-r from-orange-100 via-yellow-50 to-white rounded-xl shadow mt-4 mb-8 overflow-hidden"
-        style={{ minHeight: '320px' }}
+        className="relative flex flex-row items-center justify-between px-6 py-16 md:py-24 bg-gradient-to-r from-yellow-50 via-white to-white rounded-xl shadow mt-4 mb-8 overflow-hidden min-h-[400px]"
       >
-        {/* Left: Description & Buttons */}
-        <div className="flex-1 flex flex-col justify-center gap-3 z-10">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-orange-700 font-serif mb-2 drop-shadow-sm">Marwari Basket</h1>
-          <p className="text-base md:text-lg leading-snug text-gray-700 mb-3 max-w-md">
-            Discover authentic Rajasthani products handpicked for you. From traditional clothing to exquisite jewelry, find everything that makes Rajasthan special.
-          </p>
-          <div className="flex flex-row gap-3 mt-2">
-            <Link
-              to="/products"
-              className="bg-orange-500 text-white rounded-full px-4 py-1.5 text-sm font-semibold uppercase tracking-wide shadow hover:bg-orange-600 transition-transform hover:scale-105 text-center"
-            >
-              Shop Now
-            </Link>
-            <Link
-              to="/about"
-              className="border border-orange-500 text-orange-500 rounded-full px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-center hover:bg-orange-50 transition"
-            >
-              Learn More
-            </Link>
-          </div>
-        </div>
-        {/* Right: Camel Image visually merged with background */}
-        <div className="flex-shrink-0 flex items-center justify-center md:ml-8 z-0 relative">
-          <div className="absolute -right-8 md:right-0 top-1/2 -translate-y-1/2 w-44 h-44 md:w-64 md:h-64 rounded-full bg-gradient-to-br from-orange-200 via-yellow-100 to-white opacity-80 blur-2xl" />
+        {/* Left: Camel Image */}
+        <div className="flex flex-col items-center justify-center w-1/3 md:w-1/4 lg:w-1/5 z-10">
           <img
             src={camelImg}
             alt="Rajasthani Camel"
-            className="w-32 h-32 md:w-56 md:h-56 object-contain rounded-xl shadow-lg border-4 border-orange-100 bg-white/60"
+            className="w-32 h-32 md:w-48 md:h-48 object-contain rounded-xl shadow-lg border-4 border-orange-100 bg-white/60"
             style={{ mixBlendMode: 'multiply', zIndex: 1 }}
           />
+        </div>
+        {/* Right: Heading, Subtitle, Button */}
+        <div className="flex flex-col justify-center items-start w-full md:w-2/3 lg:w-3/5 pl-0 md:pl-12">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight drop-shadow-lg" style={{fontFamily: 'serif'}}>
+            Authentic Rajasthani<br />Heritage
+          </h1>
+          <p className="text-lg md:text-2xl text-gray-700 mb-8 max-w-2xl">
+            Discover handcrafted treasures from the royal state of Rajasthan,<br className="hidden md:block" /> where tradition meets timeless elegance.
+          </p>
+          <Link
+            to="/products"
+            className="inline-block bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-bold text-lg md:text-xl px-8 py-4 rounded-lg shadow-lg hover:from-pink-600 hover:to-yellow-500 transition-all duration-300"
+          >
+            Explore Collection &rarr;
+          </Link>
         </div>
       </section>
 
