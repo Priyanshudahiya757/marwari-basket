@@ -48,35 +48,39 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="flex flex-row items-center justify-between gap-4 px-4 py-6 bg-white rounded-xl shadow mt-4 mb-8 overflow-hidden">
-        {/* Left: Text & Buttons */}
-        <div className="flex-1 flex flex-col justify-center gap-3">
-          <h1 className="text-2xl font-semibold text-orange-700 font-serif mb-1">Marwari Basket</h1>
-          <p className="text-sm leading-snug text-gray-700 mb-2">
+      <section
+        className="relative flex flex-row items-center justify-between gap-4 px-4 py-8 md:py-14 bg-gradient-to-r from-orange-100 via-yellow-50 to-white rounded-xl shadow mt-4 mb-8 overflow-hidden"
+        style={{ minHeight: '320px' }}
+      >
+        {/* Left: Description & Buttons */}
+        <div className="flex-1 flex flex-col justify-center gap-3 z-10">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-orange-700 font-serif mb-2 drop-shadow-sm">Marwari Basket</h1>
+          <p className="text-base md:text-lg leading-snug text-gray-700 mb-3 max-w-md">
             Discover authentic Rajasthani products handpicked for you. From traditional clothing to exquisite jewelry, find everything that makes Rajasthan special.
           </p>
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="flex flex-row gap-3 mt-2">
             <Link
               to="/products"
-              className="bg-orange-500 text-white rounded-full px-5 py-2 text-base font-medium uppercase tracking-wide shadow-md hover:bg-orange-600 transition-transform hover:scale-105 text-center"
+              className="bg-orange-500 text-white rounded-full px-4 py-1.5 text-sm font-semibold uppercase tracking-wide shadow hover:bg-orange-600 transition-transform hover:scale-105 text-center"
             >
               Shop Now
             </Link>
             <Link
               to="/about"
-              className="border border-orange-500 text-orange-500 rounded-full px-5 py-2 text-base font-medium uppercase tracking-wide mt-1 text-center hover:bg-orange-50 transition"
+              className="border border-orange-500 text-orange-500 rounded-full px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-center hover:bg-orange-50 transition"
             >
               Learn More
             </Link>
           </div>
         </div>
-        {/* Right: Camel Image */}
-        <div className="flex-shrink-0 flex items-center justify-center ml-2">
+        {/* Right: Camel Image visually merged with background */}
+        <div className="flex-shrink-0 flex items-center justify-center md:ml-8 z-0 relative">
+          <div className="absolute -right-8 md:right-0 top-1/2 -translate-y-1/2 w-44 h-44 md:w-64 md:h-64 rounded-full bg-gradient-to-br from-orange-200 via-yellow-100 to-white opacity-80 blur-2xl" />
           <img
             src={camelImg}
             alt="Rajasthani Camel"
-            className="w-24 h-24 md:w-40 md:h-40 object-contain rounded-xl"
-            style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
+            className="w-32 h-32 md:w-56 md:h-56 object-contain rounded-xl shadow-lg border-4 border-orange-100 bg-white/60"
+            style={{ mixBlendMode: 'multiply', zIndex: 1 }}
           />
         </div>
       </section>
