@@ -51,17 +51,8 @@ export default function Home() {
       <section
         className="relative flex flex-row items-center justify-between px-6 py-16 md:py-24 bg-gradient-to-r from-yellow-50 via-white to-white rounded-xl shadow mt-4 mb-8 overflow-hidden min-h-[400px]"
       >
-        {/* Left: Camel Image */}
-        <div className="flex flex-col items-center justify-center w-1/3 md:w-1/4 lg:w-1/5 z-10">
-          <img
-            src={camelImg}
-            alt="Rajasthani Camel"
-            className="w-32 h-32 md:w-48 md:h-48 object-contain rounded-xl shadow-lg border-4 border-orange-100 bg-white/60"
-            style={{ mixBlendMode: 'multiply', zIndex: 1 }}
-          />
-        </div>
-        {/* Right: Heading, Subtitle, Button */}
-        <div className="flex flex-col justify-center items-start w-full md:w-2/3 lg:w-3/5 pl-0 md:pl-12">
+        {/* Left: Heading, Subtitle, Button */}
+        <div className="flex flex-col justify-center items-start w-full md:w-2/3 lg:w-3/5 pr-0 md:pr-12">
           <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight drop-shadow-lg" style={{fontFamily: 'serif'}}>
             Authentic Rajasthani<br />Heritage
           </h1>
@@ -74,6 +65,15 @@ export default function Home() {
           >
             Explore Collection &rarr;
           </Link>
+        </div>
+        {/* Right: Camel Image (no background) */}
+        <div className="flex flex-col items-center justify-center w-1/3 md:w-1/4 lg:w-1/5 z-10">
+          <img
+            src={camelImg}
+            alt="Rajasthani Camel"
+            className="w-32 h-32 md:w-48 md:h-48 object-contain"
+            style={{ zIndex: 1 }}
+          />
         </div>
       </section>
 
