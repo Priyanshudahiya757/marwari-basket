@@ -1,10 +1,18 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useEffect } from 'react';
 
 export default function BottomNav() {
   const location = useLocation();
   const { cart } = useCart();
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('🔍 BottomNav component loaded');
+    console.log('📍 Current location:', location.pathname);
+    console.log('📱 Screen width:', window.innerWidth);
+  }, [location.pathname]);
 
   const navItems = [
     {
@@ -42,8 +50,8 @@ export default function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg md:hidden">
-      <div className="flex items-center justify-around px-2 py-3">
+    <nav className="fixed bottom-0 left-0 right-0 z-[9999] bg-red-500 border-t-4 border-blue-500 shadow-2xl md:hidden" style={{height: '80px'}}>
+      <div className="flex items-center justify-around px-2 py-3 h-full">
         {navItems.map((item) => {
           const active = isActive(item.path);
           return (
@@ -52,14 +60,14 @@ export default function BottomNav() {
               to={item.path}
               className={`flex flex-col items-center justify-center w-16 h-16 rounded-xl transition-all duration-200 ${
                 active
-                  ? 'bg-pink-100 text-pink-600 scale-110'
-                  : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
+                  ? 'bg-yellow-300 text-black scale-110'
+                  : 'text-white hover:text-yellow-300 hover:bg-red-600'
               }`}
             >
               <div className="relative">
                 <span className="text-2xl">{active ? item.activeIcon : item.icon}</span>
                 {item.badge && item.badge > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-yellow-400 text-gray-900 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold border border-white">
+                  <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold border border-white">
                     {item.badge > 9 ? '9+' : item.badge}
                   </span>
                 )}
